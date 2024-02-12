@@ -1,0 +1,23 @@
+\nwixaddsx{i}{{\nwixident {coord2pixel}}{coord2pixel}}
+\nwixaddsx{i}{{\nwixident {{\_}GNU{\_}SOURCE}}{:unGNU:unSOURCE}}
+\nwixaddsx{c}{{led grid implementation}{NWtoS7h-2vli0T-1}{\nwixu {NWtoS7h-14adIh-1}\nwixd {NWtoS7h-2vli0T-1}}}
+\nwixaddsx{c}{{led grid interface}{NWtoS7h-KtFFa-1}{\nwixu {NWtoS7h-38kWWp-1}\nwixd {NWtoS7h-KtFFa-1}\nwixd {NWtoS7h-KtFFa-2}\nwixd {NWtoS7h-KtFFa-3}\nwixd {NWtoS7h-KtFFa-4}\nwixd {NWtoS7h-KtFFa-5}}}
+\nwixaddsx{i}{{\nwixident {LedGrid}}{LedGrid}}
+\nwixaddsx{c}{{LedGrid.c}{NWtoS7h-14adIh-1}{\nwixd {NWtoS7h-14adIh-1}}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}Clear}}{LedGrid:unClear}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}Free}}{LedGrid:unFree}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}GetBlue}}{LedGrid:unGetBlue}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}GetColorInt}}{LedGrid:unGetColorInt}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}GetColorValue}}{LedGrid:unGetColorValue}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}GetGreen}}{LedGrid:unGetGreen}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}GetRed}}{LedGrid:unGetRed}}
+\nwixaddsx{c}{{LedGrid.h}{NWtoS7h-38kWWp-1}{\nwixd {NWtoS7h-38kWWp-1}}}
+\nwixaddsx{i}{{\nwixident {LEDGRID{\_}INCLUDED}}{LEDGRID:unINCLUDED}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}Init}}{LedGrid:unInit}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}SetBlue}}{LedGrid:unSetBlue}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}SetColor}}{LedGrid:unSetColor}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}SetColorInt}}{LedGrid:unSetColorInt}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}SetColorValue}}{LedGrid:unSetColorValue}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}SetGreen}}{LedGrid:unSetGreen}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}SetRed}}{LedGrid:unSetRed}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}Show}}{LedGrid:unShow}}

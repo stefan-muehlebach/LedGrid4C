@@ -1,0 +1,340 @@
+\documentclass[abstracton,10pt]{scrartcl}
+
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{tabularx}
+\usepackage[dvips]{color}
+\usepackage[dvips]{graphicx}
+\usepackage{path}
+\usepackage{alltt}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{fancyvrb}
+\usepackage{calc}
+\usepackage{noweb}
+
+\noweboptions{margintag}
+\noweboptions{smallcode}
+\noweboptions{shortxref}
+\noweboptions{noidentxref}
+\noweboptions{externalindex}
+
+\begin{document}
+
+\title{LedGrid}
+\author{Stefan M"uhlebach}
+\date{12.09.2015}
+
+\maketitle
+
+\section{Das Interface}
+
+<<LedGrid.h>>=
+#ifndef LEDGRID_INCLUDED
+#define LEDGRID_INCLUDED
+
+<<led grid interface>>
+
+#endif /* LEDGRID_INCLUDED */
+
+@
+\subsection{Led Grid}
+
+Im Zentrum des Packages steht der Datentyp [[LedGrid]], welcher im Header-File nicht vollst"andig definiert ist.
+
+<<led grid interface>>=
+typedef struct LedGrid *LedGrid;
+
+@ Der Aufz"ahlungstyp [[LedGrid_ColorIndexEnum]] dient zur Identifikation einer der drei Farbkomponenten jedes Pixels.
+
+<<led grid interface>>=
+enum LedGrid_ColorIndexEnum {
+    RED, GREEN, BLUE
+};
+
+@ Mit den Funktionen [[LedGrid_Init]] und [[LedGrid_Free]] kann die Datenstruktur hinter einem LED-Grid erstellt, resp. entfernt werden.
+
+<<led grid interface>>=
+extern LedGrid LedGrid_Init (int nCols, int nRows);
+extern void    LedGrid_Free (LedGrid lg);
+
+@ Mit [[LedGrid_Show]] werden die Daten auf dem Panel dargestellt.
+
+<<led grid interface>>=
+extern void    LedGrid_Show (LedGrid lg);
+
+@ Zum Setzen und Abfragen einer bestimmten Pixelfarbe existieren eine Reihe von Funktionen.
+
+\begin{table}[!ht]
+\begin{tabularx}{\linewidth}{@{}l|X@{}}
+\textsc{Funktion} & \textsc{Beschreibung} \\
+\hline
+[[SetColor]] & Setzt alle Farbwerte eines Pixels, wobei die einzelnen Farbwerte als separate Werte ([[unsigned char]]) angegeben werden. \\
+\hline
+[[SetColorValue]] & Setzt den Farbwert einer einzelnen Farbe die mit dem Parameter [[colorIndex]] definiert wird. \\
+\hline
+[[SetColorInt]] & Definiert den Farbwert eines Pixels "uber eine 32\,Bit Zahl, welche die Werte f"ur Rot, Gr"un und Blau in den unteren 24\,Bits enth"alt. \\
+\hline
+\end{tabularx}
+\end{table}
+
+<<led grid interface>>=
+extern void    LedGrid_SetColor (LedGrid lg, int col, int row,
+        unsigned char red, unsigned char green, unsigned char blue);
+extern void    LedGrid_SetColorValue (LedGrid lg, int col, int row,
+        enum LedGrid_ColorIndexEnum colorIndex, unsigned char value);
+extern void    LedGrid_SetColorInt (LedGrid lg, int col, int row,
+        unsigned int value);
+
+extern void    LedGrid_SetRed (LedGrid lg, int col, int row,
+        unsigned char value);
+extern void    LedGrid_SetGreen (LedGrid lg, int col, int row,
+        unsigned char value);
+extern void    LedGrid_SetBlue (LedGrid lg, int col, int row,
+        unsigned char value);
+
+extern unsigned char LedGrid_GetColorValue (LedGrid lg, int col, int row,
+        enum LedGrid_ColorIndexEnum colorIndex);
+extern unsigned int  LedGrid_GetColorInt (LedGrid lg, int col, int row);
+
+extern unsigned char LedGrid_GetRed (LedGrid lg, int col, int row);
+extern unsigned char LedGrid_GetGreen (LedGrid lg, int col, int row);
+extern unsigned char LedGrid_GetBlue (LedGrid lg, int col, int row);
+
+extern void    LedGrid_Clear (LedGrid lg);
+
+@
+\section{Die Implementation}
+
+<<LedGrid.c>>=
+#define _GNU_SOURCE
+
+#include "LedGrid.h"
+#include <wiringPi.h>
+#include <softPwm.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <limits.h>
+#include <math.h>
+#include <assert.h>
+#include <pthread.h>
+
+<<led grid implementation>>
+
+@
+\subsection{Led Grid}
+
+<<led grid implementation>>=
+struct LedGrid {
+    int nCols, nRows, nPixels;
+    unsigned char *strip;
+    int fd;
+};
+
+LedGrid LedGrid_Init (int nCols, int nRows) {
+    LedGrid lg;
+
+    lg = malloc (sizeof (*lg));
+    lg->nCols = nCols;
+    lg->nRows = nRows;
+    lg->nPixels = nCols * nRows;
+
+    lg->strip = calloc (lg->nPixels, 3 * sizeof (unsigned char));
+
+    lg->fd = open ("/dev/spidev0.0", O_WRONLY | O_DSYNC);
+
+    return lg;
+}
+
+void LedGrid_Free (LedGrid lg) {
+    assert (lg != NULL);
+
+    free (lg->strip);
+    free (lg);
+}
+
+void LedGrid_Show (LedGrid lg) {
+    assert (lg != NULL);
+
+    write (lg->fd, lg->strip, 3*lg->nPixels);
+    fsync (lg->fd);
+}
+
+int coord2pixel (LedGrid lg, int col, int row) {
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    if (row%2 == 0) {
+        return row*lg->nCols + col;
+    } else {
+        return (row+1)*lg->nCols - 1 - col;
+    }
+}
+
+void LedGrid_SetColor (LedGrid lg, int col, int row,
+        unsigned char red, unsigned char green, unsigned char blue) {
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+    lg->strip[3 * pixel + RED]   = red;
+    lg->strip[3 * pixel + GREEN] = green;
+    lg->strip[3 * pixel + BLUE]  = blue;
+}
+
+void LedGrid_SetColorValue (LedGrid lg, int col, int row,
+        enum LedGrid_ColorIndexEnum colorIndex, unsigned char value) {
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+    lg->strip[3 * pixel + colorIndex] = value;
+}
+
+void LedGrid_SetColorInt (LedGrid lg, int col, int row,
+        unsigned int value) {
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+    lg->strip[3 * pixel + RED]   = (value >> 16) & 0xFF;
+    lg->strip[3 * pixel + GREEN] = (value >> 8) & 0xFF;
+    lg->strip[3 * pixel + BLUE]  = value & 0xFF;
+}
+
+void LedGrid_SetRed (LedGrid lg, int col, int row,
+        unsigned char value) {
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+    lg->strip[3 * pixel + RED] = value;
+}
+
+void LedGrid_SetGreen (LedGrid lg, int col, int row,
+        unsigned char value) {
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+    lg->strip[3 * pixel + GREEN] = value;
+}
+
+void LedGrid_SetBlue (LedGrid lg, int col, int row,
+        unsigned char value) {
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+    lg->strip[3 * pixel + BLUE] = value;
+}
+
+unsigned char LedGrid_GetColorValue (LedGrid lg, int col, int row,
+        enum LedGrid_ColorIndexEnum colorIndex) {
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+
+    return lg->strip[3 * pixel + colorIndex];
+}
+
+unsigned int LedGrid_GetColorInt (LedGrid lg, int col, int row) {
+    int pixel;
+    unsigned int value;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+
+    value = lg->strip[3 * pixel + RED];
+    value <<= 8;
+    value += lg->strip[3 * pixel + GREEN];
+    value <<= 8;
+    value += lg->strip[3 * pixel + BLUE];
+
+    return value;
+}
+
+unsigned char LedGrid_GetRed (LedGrid lg, int col, int row) {
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+
+    return lg->strip[3 * pixel + RED];
+}
+
+unsigned char LedGrid_GetGreen (LedGrid lg, int col, int row) {
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+
+    return lg->strip[3 * pixel + GREEN];
+}
+
+unsigned char LedGrid_GetBlue (LedGrid lg, int col, int row) {
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = coord2pixel (lg, col, row);
+
+    return lg->strip[3 * pixel + BLUE];
+}
+
+void LedGrid_Clear (LedGrid lg) {
+    int i;
+
+    assert (lg != NULL);
+
+    for (i=0; i<3*lg->nPixels; i++) {
+        lg->strip[i] = 0;
+    }
+}
+
+@
+\nowebindex
+
+\end{document}
+

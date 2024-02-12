@@ -1,0 +1,439 @@
+\documentclass[abstracton,10pt]{scrartcl}
+
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{tabularx}
+\usepackage[dvips]{color}
+\usepackage[dvips]{graphicx}
+\usepackage{path}
+\usepackage{alltt}
+\usepackage{longtable}
+\usepackage{fancyvrb}
+\usepackage{calc}
+\usepackage{noweb}
+
+\noweboptions{margintag}
+\noweboptions{smallcode}
+\noweboptions{shortxref}
+\noweboptions{noidentxref}
+\noweboptions{externalindex}
+
+\begin{document}
+
+\title{PiPack}
+\author{Stefan M"uhlebach}
+\date{20.07.2015}
+
+\maketitle
+
+\section{Das Interface}
+
+<<PiPack.h>>=
+#ifndef PIPACK_INCLUDED
+#define PIPACK_INCLUDED
+
+<<led strip interface>>
+<<led grid interface>>
+
+#endif /* PIPACK_INCLUDED */
+
+@
+\subsection{Led Strip}
+
+<<led strip interface>>=
+typedef struct LedStrip *LedStrip;
+
+enum LedStrip_ColorIndexEnum {
+    RED, GREEN, BLUE
+};
+
+extern LedStrip      LedStrip_Init (int size, float gammaValue);
+extern void          LedStrip_Free (LedStrip ls);
+extern void          LedStrip_Show (LedStrip ls);
+
+extern void          LedStrip_SetColor (LedStrip ls, int pixel,
+        unsigned char red, unsigned char green, unsigned char blue);
+extern void          LedStrip_SetColorValue (LedStrip ls, int pixel,
+        enum LedStrip_ColorIndexEnum colorIndex, unsigned char value);
+extern void          LedStrip_SetValue (LedStrip ls, int pixel,
+        unsigned char value);
+extern void          LedStrip_SetRed (LedStrip ls, int pixel,
+        unsigned char red);
+extern void          LedStrip_SetGreen (LedStrip ls, int pixel,
+        unsigned char green);
+extern void          LedStrip_SetBlue (LedStrip ls, int pixel,
+        unsigned char blue);
+extern void          LedStrip_SetGamma (LedStrip ls, float gammaValue);
+
+extern unsigned char LedStrip_GetColorValue (LedStrip ls, int pixel,
+        enum LedStrip_ColorIndexEnum colorIndex);
+extern unsigned char LedStrip_GetValue (LedStrip ls, int pixel);
+extern unsigned char LedStrip_GetRed (LedStrip ls, int pixel);
+extern unsigned char LedStrip_GetGreen (LedStrip ls, int pixel);
+extern unsigned char LedStrip_GetBlue (LedStrip ls, int pixel);
+
+extern void          LedStrip_PushColor (LedStrip ls,
+        unsigned char red, unsigned char green, unsigned char blue);
+extern void          LedStrip_PushColorValue (LedStrip ls,
+        enum LedStrip_ColorIndexEnum colorIndex, unsigned char value);
+extern void          LedStrip_PushValue (LedStrip ls, unsigned char value);
+
+extern void          LedStrip_AllOn (LedStrip ls);
+extern void          LedStrip_AllOff (LedStrip ls);
+
+extern void          LedStrip_Fade (LedStrip ls);
+extern void          LedStrip_Cycle (LedStrip ls);
+
+@
+\subsection{Led Grid}
+
+<<led grid interface>>=
+typedef struct LedGrid *LedGrid;
+
+enum LedGrid_ShiftDirectionEnum {
+    SHIFT_UP, SHIFT_DOWN, SHIFT_LEFT, SHIFT_RIGHT
+};
+
+extern LedGrid LedGrid_Init (int sizeX, int sizeY, float gammaValue);
+extern void    LedGrid_Free (LedGrid lg);
+extern void    LedGrid_Show (LedGrid lg);
+
+extern void    LedGrid_SetColor (LedGrid lg, int x, int y,
+               unsigned char red, unsigned char green, unsigned char blue);
+extern void    LedGrid_SetColorValue (LedGrid lg, int x, int y,
+               enum LedStrip_ColorIndexEnum colorIndex, unsigned char value);
+extern void    LedGrid_SetValue (LedGrid lg, int x, int y, unsigned char value);
+extern void    LedGrid_SetRed (LedGrid lg, int x, int y, unsigned char value);
+extern void    LedGrid_SetGreen (LedGrid lg, int x, int y, unsigned char value);
+extern void    LedGrid_SetBlue (LedGrid lg, int x, int y, unsigned char value);
+extern void    LedGrid_SetColorInt (LedGrid lg, int x, int y, unsigned int value);
+extern void    LedGrid_SetGamma (LedGrid lg, float gammaValue);
+
+extern void    LedGrid_SetAllColor (LedGrid lg,
+               unsigned char red, unsigned char green, unsigned char blue);
+extern void    LedGrid_SetAllColorValue (LedGrid lg,
+               enum LedStrip_ColorIndexEnum colorIndex, unsigned char value);
+
+extern unsigned char LedGrid_GetColorValue (LedGrid lg, int x, int y,
+                     enum LedStrip_ColorIndexEnum colorIndex);
+extern unsigned char LedGrid_GetValue (LedGrid lg, int x, int y);
+extern unsigned char LedGrid_GetRed (LedGrid lg, int x, int y);
+extern unsigned char LedGrid_GetGreen (LedGrid lg, int x, int y);
+extern unsigned char LedGrid_GetBlue (LedGrid lg, int x, int y);
+
+extern void    LedGrid_AllOn  (LedGrid lg);
+extern void    LedGrid_AllOff (LedGrid lg);
+
+extern int     LedGrid_NewImage (LedGrid lg);
+extern int     LedGrid_LoadImage (LedGrid lg, char *fileName,
+                             int imgIndex);
+extern int     LedGrid_SaveImage (LedGrid lg, char *fileName,
+                             int imgIndex);
+extern void    LedGrid_SetImage (LedGrid lg, int imageIndex,
+                             int fadeStep);
+extern int     LedGrid_GetImageCount (LedGrid lg);
+extern int     LedGrid_GetCurImage (LedGrid lg);
+
+extern void    LedGrid_FadeImage (LedGrid lg);
+extern void    LedGrid_InterpolateImage (LedGrid lg);
+
+extern void    LedGrid_Clear (LedGrid lg);
+
+extern void    LedGrid_Shift (LedGrid lg,
+               enum LedGrid_ShiftDirectionEnum direction,
+               int rotate);
+
+@
+\section{Die Implementation}
+
+<<PiPack.c>>=
+#define _GNU_SOURCE
+#define LEDGRID_V2
+
+#include "PiPack.h"
+#include <wiringPi.h>
+#include <softPwm.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <limits.h>
+#include <math.h>
+#include <assert.h>
+#include <pthread.h>
+
+<<led strip implementation>>
+<<led grid implementation>>
+
+@
+\subsection{Led Strip}
+
+<<led strip implementation>>=
+#define LEDSTRIP_MAXLENGTH 100
+
+struct LedStrip {
+    int fd;
+    int size;
+    unsigned char *array, *output, *gamma;
+};
+
+LedStrip LedStrip_Init (int size, float gammaValue) {
+    LedStrip ls;
+    int i;
+
+    assert ((size > 0) && (size <= LEDSTRIP_MAXLENGTH));
+
+    ls = malloc (sizeof (*ls));
+    ls->fd = open ("/dev/spidev0.0", O_WRONLY | O_DSYNC);
+    ls->size = size;
+    ls->array = calloc (size, 3 * sizeof (unsigned char));
+    ls->output = calloc (size, 3 * sizeof (unsigned char));
+    ls->gamma = calloc (256, sizeof (unsigned char));
+    LedStrip_SetGamma (ls, gammaValue);
+
+    return ls;
+}
+
+void LedStrip_Free (LedStrip ls) {
+    assert (ls != NULL);
+
+    free (ls->array);
+    free (ls->output);
+    free (ls->gamma);
+    free (ls);
+}
+
+void LedStrip_Show (LedStrip ls) {
+    int i;
+
+    assert (ls != NULL);
+
+    for (i=0; i<3*ls->size; i++) {
+        ls->output[i] = ls->gamma[ls->array[i]];
+    }
+    write (ls->fd, ls->output, 3 * ls->size);
+    fsync (ls->fd);
+}
+
+void LedStrip_SetGamma (LedStrip ls, float gammaValue) {
+    int i;
+
+    assert (ls != NULL);
+
+    for (i=0; i<256; i++) {
+        ls->gamma[i] = (unsigned char) (255.0 * pow ((float)i/255.0, gammaValue) + 0.5);
+    }
+}
+
+void LedStrip_SetColor (LedStrip ls, int pixel,
+        unsigned char red, unsigned char green, unsigned char blue) {
+    assert (ls != NULL);
+    assert (pixel < ls->size);
+
+    ls->array[3 * pixel + 0] = red;
+    ls->array[3 * pixel + 1] = green;
+    ls->array[3 * pixel + 2] = blue;
+}
+
+void LedStrip_SetColorValue (LedStrip ls, int pixel,
+        enum LedStrip_ColorIndexEnum colorIndex, unsigned char value) {
+    ls->array[3 * pixel + colorIndex] = value;
+}
+
+void LedStrip_SetRed (LedStrip ls, int pixel, unsigned char red) {
+    ls->array[3 * pixel + 0] = red;
+}
+
+void LedStrip_SetGreen (LedStrip ls, int pixel, unsigned char green) {
+    ls->array[3 * pixel + 1] = green;
+}
+
+void LedStrip_SetBlue (LedStrip ls, int pixel, unsigned char blue) {
+    ls->array[3 * pixel + 2] = blue;
+}
+
+unsigned char LedStrip_GetColorValue (LedStrip ls, int pixel,
+        enum LedStrip_ColorIndexEnum colorIndex) {
+    return ls->array[3 * pixel + colorIndex];
+}
+
+unsigned char LedStrip_GetRed (LedStrip ls, int pixel) {
+    return ls->array[3 * pixel + 0];
+}
+
+unsigned char LedStrip_GetGreen (LedStrip ls, int pixel) {
+    return ls->array[3 * pixel + 1];
+}
+
+unsigned char LedStrip_GetBlue (LedStrip ls, int pixel) {
+    return ls->array[3 * pixel + 2];
+}
+
+void LedStrip_SetValue (LedStrip ls, int pixel, unsigned char value) {
+    LedStrip_SetColor (ls, pixel, value, value, value);
+}
+
+unsigned char LedStrip_GetValue (LedStrip ls, int pixel) {
+    return ls->array[3 * pixel];
+}
+
+void LedStrip_Cycle (LedStrip ls) {
+    int i;
+    unsigned char red, green, blue;
+
+    red   = ls->array[3 * (ls->size-1) + 0];
+    green = ls->array[3 * (ls->size-1) + 1];
+    blue  = ls->array[3 * (ls->size-1) + 2];
+    for (i=ls->size-1; i>0; i--) {
+        ls->array[3 * i + 0] = ls->array[3 * (i-1) + 0];
+        ls->array[3 * i + 1] = ls->array[3 * (i-1) + 1];
+        ls->array[3 * i + 2] = ls->array[3 * (i-1) + 2];
+    }
+    ls->array[0] = red;
+    ls->array[1] = green;
+    ls->array[2] = blue;
+}
+
+void LedStrip_PushColor (LedStrip ls,
+        unsigned char red, unsigned char green, unsigned char blue) {
+    int i;
+
+    for (i=ls->size-1; i>0; i--) {
+        ls->array[3 * i + 0] = ls->array[3 * (i-1) + 0];
+        ls->array[3 * i + 1] = ls->array[3 * (i-1) + 1];
+        ls->array[3 * i + 2] = ls->array[3 * (i-1) + 2];
+    }
+    LedStrip_SetColor (ls, 0, red, green, blue);
+}
+
+void LedStrip_PushValue (LedStrip ls, unsigned char value) {
+    LedStrip_PushColor (ls, value, value, value);
+}
+
+void LedStrip_AllOn (LedStrip ls) {
+    int i;
+
+    for (i=0; i<ls->size; i++) {
+        LedStrip_SetValue (ls, i, 255);
+    }
+    LedStrip_Show (ls);
+}
+
+void LedStrip_AllOff (LedStrip ls) {
+    int i;
+
+    for (i=0; i<ls->size; i++) {
+        LedStrip_SetValue (ls, i, 0);
+    }
+    LedStrip_Show (ls);
+}
+
+void LedStrip_Fade (LedStrip ls) {
+    int i;
+
+    for (i=0; i<3*ls->size; i++) {
+        ls->array[i] /= 2;
+    }
+}
+
+@
+\subsection{Led Grid}
+
+<<led grid implementation>>=
+struct LedGrid {
+    int sizeX, sizeY, size;
+    int numImages, curImage, fadeStep;
+    unsigned char ***field;
+    int startByte;
+    LedStrip ls;
+    Semaphore sem;
+};
+
+LedGrid LedGrid_Init (int sizeX, int sizeY, float gammaValue) {
+    LedGrid lg;
+    int i;
+
+    lg = malloc (sizeof (*lg));
+    lg->sizeX = sizeX;
+    lg->sizeY = sizeY;
+    lg->numImages = 1;
+    lg->curImage  = 0;
+    lg->fadeStep  = 0;
+
+    lg->field    = calloc (lg->numImages, sizeof (unsigned char **));
+    lg->field[lg->curImage] = calloc (lg->sizeY, sizeof (unsigned char *));
+    for (i=0; i<sizeY; i++) {
+        lg->field[lg->curImage][i] = calloc (lg->sizeX, 3 * sizeof (unsigned char));
+    }
+    lg->startByte = 3 * (LEDSTRIP_MAXLENGTH - (lg->sizeX * lg->sizeY));
+    lg->ls = LedStrip_Init (LEDSTRIP_MAXLENGTH, gammaValue);
+    lg->sem = Semaphore_Init (1);
+
+    return lg;
+}
+
+void LedGrid_Free (LedGrid lg) {
+    int i, j;
+
+    assert (lg != NULL);
+
+    for (i=0; i<lg->numImages; i++) {
+        for (j=0; j<lg->sizeY; j++) {
+            free (lg->field[i][j]);
+        }
+        free (lg->field[i]);
+    }
+    free (lg->field);
+    LedStrip_Free (lg->ls);
+    free (lg);
+}
+
+void LedGrid_Show (LedGrid lg) {
+    int i, j, k, l;
+    int v1, v2, v;
+
+    assert (lg != NULL);
+
+    Semaphore_P (lg->sem);
+    k = lg->startByte;
+    for (i=0; i<lg->sizeY; i++) {
+        if (i%2 == 0) {
+            for (l=0; l<3*lg->sizeX; l++) {
+                if (lg->fadeStep == 0) {
+                    v  = lg->field[lg->curImage][i][l];
+                } else {
+                    v1 = lg->field[lg->curImage][i][l];
+                    v2 = lg->field[(lg->curImage+1)%lg->numImages][i][l];
+                    v = v1 + lg->fadeStep * (v2-v1) / 100;
+                }
+                lg->ls->array[k++] = v;
+            }
+        } else {
+            for (j=lg->sizeX-1; j>=0; j--) {
+                for (l=0; l<3; l++) {
+                    if (lg->fadeStep == 0) {
+                        v  = lg->field[lg->curImage][i][3*j+l];
+                    } else {
+                        v1 = lg->field[lg->curImage][i][3*j+l];
+                        v2 = lg->field[(lg->curImage+1)%lg->numImages][i][3*j+l];
+                        v = v1 + lg->fadeStep * (v2-v1) / 100;
+                    }
+                    lg->ls->array[k++] = v;
+                }
+            }
+        }
+    }
+    LedStrip_Show (lg->ls);
+    Semaphore_V (lg->sem);
+}
+
+@
+\nowebindex
+
+\end{document}
+

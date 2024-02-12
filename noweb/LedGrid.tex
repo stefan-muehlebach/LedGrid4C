@@ -1,0 +1,366 @@
+\documentclass[abstracton,10pt]{scrartcl}% ===> this file was generated automatically by noweave --- better not edit it
+
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{tabularx}
+\usepackage[dvips]{color}
+\usepackage[dvips]{graphicx}
+\usepackage{path}
+\usepackage{alltt}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{fancyvrb}
+\usepackage{calc}
+\usepackage{noweb}
+
+\noweboptions{margintag}
+\noweboptions{smallcode}
+\noweboptions{shortxref}
+\noweboptions{noidentxref}
+\noweboptions{externalindex}
+
+\begin{document}
+
+\title{LedGrid}
+\author{Stefan M"uhlebach}
+\date{12.09.2015}
+
+\maketitle
+
+\section{Das Interface}
+
+\nwfilename{LedGrid.nw}\nwbegincode{1}\sublabel{NWtoS7h-38kWWp-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtoS7h-38kWWp-1}}}\moddef{LedGrid.h~{\nwtagstyle{}\subpageref{NWtoS7h-38kWWp-1}}}\endmoddef\nwstartdeflinemarkup\nwenddeflinemarkup
+#ifndef \nwlinkedidentc{LEDGRID_INCLUDED}{NWtoS7h-38kWWp-1}
+#define \nwlinkedidentc{LEDGRID_INCLUDED}{NWtoS7h-38kWWp-1}\nwindexdefn{\nwixident{LEDGRID{\_}INCLUDED}}{LEDGRID:unINCLUDED}{NWtoS7h-38kWWp-1}
+
+\LA{}led grid interface~{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-1}}\RA{}
+
+#endif /* \nwlinkedidentc{LEDGRID_INCLUDED}{NWtoS7h-38kWWp-1} */
+
+\nwnotused{LedGrid.h}\nwidentdefs{\\{{\nwixident{LEDGRID{\_}INCLUDED}}{LEDGRID:unINCLUDED}}}\nwendcode{}\nwbegindocs{2}\nwdocspar
+\subsection{Led Grid}
+
+Im Zentrum des Packages steht der Datentyp {\Tt{}\nwlinkedidentq{LedGrid}{NWtoS7h-KtFFa-1}\nwendquote}, welcher im Header-File nicht vollst"andig definiert ist.
+
+\nwenddocs{}\nwbegincode{3}\sublabel{NWtoS7h-KtFFa-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-1}}}\moddef{led grid interface~{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtoS7h-38kWWp-1}}\nwprevnextdefs{\relax}{NWtoS7h-KtFFa-2}\nwenddeflinemarkup
+typedef struct \nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} *\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1};\nwindexdefn{\nwixident{LedGrid}}{LedGrid}{NWtoS7h-KtFFa-1}
+
+\nwalsodefined{\\{NWtoS7h-KtFFa-2}\\{NWtoS7h-KtFFa-3}\\{NWtoS7h-KtFFa-4}\\{NWtoS7h-KtFFa-5}}\nwused{\\{NWtoS7h-38kWWp-1}}\nwidentdefs{\\{{\nwixident{LedGrid}}{LedGrid}}}\nwendcode{}\nwbegindocs{4}Der Aufz"ahlungstyp {\Tt{}LedGrid{\_}ColorIndexEnum\nwendquote} dient zur Identifikation einer der drei Farbkomponenten jedes Pixels.
+
+\nwenddocs{}\nwbegincode{5}\sublabel{NWtoS7h-KtFFa-2}\nwmargintag{{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-2}}}\moddef{led grid interface~{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtoS7h-38kWWp-1}}\nwprevnextdefs{NWtoS7h-KtFFa-1}{NWtoS7h-KtFFa-3}\nwenddeflinemarkup
+enum LedGrid_ColorIndexEnum \{
+    RED, GREEN, BLUE
+\};
+
+\nwused{\\{NWtoS7h-38kWWp-1}}\nwendcode{}\nwbegindocs{6}Mit den Funktionen {\Tt{}\nwlinkedidentq{LedGrid{\_}Init}{NWtoS7h-2vli0T-1}\nwendquote} und {\Tt{}\nwlinkedidentq{LedGrid{\_}Free}{NWtoS7h-2vli0T-1}\nwendquote} kann die Datenstruktur hinter einem LED-Grid erstellt, resp. entfernt werden.
+
+\nwenddocs{}\nwbegincode{7}\sublabel{NWtoS7h-KtFFa-3}\nwmargintag{{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-3}}}\moddef{led grid interface~{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtoS7h-38kWWp-1}}\nwprevnextdefs{NWtoS7h-KtFFa-2}{NWtoS7h-KtFFa-4}\nwenddeflinemarkup
+extern \nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} \nwlinkedidentc{LedGrid_Init}{NWtoS7h-2vli0T-1} (int nCols, int nRows);
+extern void    \nwlinkedidentc{LedGrid_Free}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg);
+
+\nwused{\\{NWtoS7h-38kWWp-1}}\nwidentuses{\\{{\nwixident{LedGrid}}{LedGrid}}\\{{\nwixident{LedGrid{\_}Free}}{LedGrid:unFree}}\\{{\nwixident{LedGrid{\_}Init}}{LedGrid:unInit}}}\nwindexuse{\nwixident{LedGrid}}{LedGrid}{NWtoS7h-KtFFa-3}\nwindexuse{\nwixident{LedGrid{\_}Free}}{LedGrid:unFree}{NWtoS7h-KtFFa-3}\nwindexuse{\nwixident{LedGrid{\_}Init}}{LedGrid:unInit}{NWtoS7h-KtFFa-3}\nwendcode{}\nwbegindocs{8}Mit {\Tt{}\nwlinkedidentq{LedGrid{\_}Show}{NWtoS7h-2vli0T-1}\nwendquote} werden die Daten auf dem Panel dargestellt.
+
+\nwenddocs{}\nwbegincode{9}\sublabel{NWtoS7h-KtFFa-4}\nwmargintag{{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-4}}}\moddef{led grid interface~{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtoS7h-38kWWp-1}}\nwprevnextdefs{NWtoS7h-KtFFa-3}{NWtoS7h-KtFFa-5}\nwenddeflinemarkup
+extern void    \nwlinkedidentc{LedGrid_Show}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg);
+
+\nwused{\\{NWtoS7h-38kWWp-1}}\nwidentuses{\\{{\nwixident{LedGrid}}{LedGrid}}\\{{\nwixident{LedGrid{\_}Show}}{LedGrid:unShow}}}\nwindexuse{\nwixident{LedGrid}}{LedGrid}{NWtoS7h-KtFFa-4}\nwindexuse{\nwixident{LedGrid{\_}Show}}{LedGrid:unShow}{NWtoS7h-KtFFa-4}\nwendcode{}\nwbegindocs{10}Zum Setzen und Abfragen einer bestimmten Pixelfarbe existieren eine Reihe von Funktionen.
+
+\begin{table}[!ht]
+\begin{tabularx}{\linewidth}{@{}l|X@{}}
+\textsc{Funktion} & \textsc{Beschreibung} \\
+\hline
+{\Tt{}SetColor\nwendquote} & Setzt alle Farbwerte eines Pixels, wobei die einzelnen Farbwerte als separate Werte ({\Tt{}unsigned\ char\nwendquote}) angegeben werden. \\
+\hline
+{\Tt{}SetColorValue\nwendquote} & Setzt den Farbwert einer einzelnen Farbe die mit dem Parameter {\Tt{}colorIndex\nwendquote} definiert wird. \\
+\hline
+{\Tt{}SetColorInt\nwendquote} & Definiert den Farbwert eines Pixels "uber eine 32\,Bit Zahl, welche die Werte f"ur Rot, Gr"un und Blau in den unteren 24\,Bits enth"alt. \\
+\hline
+\end{tabularx}
+\end{table}
+
+\nwenddocs{}\nwbegincode{11}\sublabel{NWtoS7h-KtFFa-5}\nwmargintag{{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-5}}}\moddef{led grid interface~{\nwtagstyle{}\subpageref{NWtoS7h-KtFFa-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtoS7h-38kWWp-1}}\nwprevnextdefs{NWtoS7h-KtFFa-4}{\relax}\nwenddeflinemarkup
+extern void    \nwlinkedidentc{LedGrid_SetColor}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,
+        unsigned char red, unsigned char green, unsigned char blue);
+extern void    \nwlinkedidentc{LedGrid_SetColorValue}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,
+        enum LedGrid_ColorIndexEnum colorIndex, unsigned char value);
+extern void    \nwlinkedidentc{LedGrid_SetColorInt}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,
+        unsigned int value);
+
+extern void    \nwlinkedidentc{LedGrid_SetRed}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,
+        unsigned char value);
+extern void    \nwlinkedidentc{LedGrid_SetGreen}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,
+        unsigned char value);
+extern void    \nwlinkedidentc{LedGrid_SetBlue}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,
+        unsigned char value);
+
+extern unsigned char \nwlinkedidentc{LedGrid_GetColorValue}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,
+        enum LedGrid_ColorIndexEnum colorIndex);
+extern unsigned int  \nwlinkedidentc{LedGrid_GetColorInt}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row);
+
+extern unsigned char \nwlinkedidentc{LedGrid_GetRed}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row);
+extern unsigned char \nwlinkedidentc{LedGrid_GetGreen}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row);
+extern unsigned char \nwlinkedidentc{LedGrid_GetBlue}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row);
+
+extern void    \nwlinkedidentc{LedGrid_Clear}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg);
+
+\nwused{\\{NWtoS7h-38kWWp-1}}\nwidentuses{\\{{\nwixident{LedGrid}}{LedGrid}}\\{{\nwixident{LedGrid{\_}Clear}}{LedGrid:unClear}}\\{{\nwixident{LedGrid{\_}GetBlue}}{LedGrid:unGetBlue}}\\{{\nwixident{LedGrid{\_}GetColorInt}}{LedGrid:unGetColorInt}}\\{{\nwixident{LedGrid{\_}GetColorValue}}{LedGrid:unGetColorValue}}\\{{\nwixident{LedGrid{\_}GetGreen}}{LedGrid:unGetGreen}}\\{{\nwixident{LedGrid{\_}GetRed}}{LedGrid:unGetRed}}\\{{\nwixident{LedGrid{\_}SetBlue}}{LedGrid:unSetBlue}}\\{{\nwixident{LedGrid{\_}SetColor}}{LedGrid:unSetColor}}\\{{\nwixident{LedGrid{\_}SetColorInt}}{LedGrid:unSetColorInt}}\\{{\nwixident{LedGrid{\_}SetColorValue}}{LedGrid:unSetColorValue}}\\{{\nwixident{LedGrid{\_}SetGreen}}{LedGrid:unSetGreen}}\\{{\nwixident{LedGrid{\_}SetRed}}{LedGrid:unSetRed}}}\nwindexuse{\nwixident{LedGrid}}{LedGrid}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}Clear}}{LedGrid:unClear}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}GetBlue}}{LedGrid:unGetBlue}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}GetColorInt}}{LedGrid:unGetColorInt}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}GetColorValue}}{LedGrid:unGetColorValue}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}GetGreen}}{LedGrid:unGetGreen}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}GetRed}}{LedGrid:unGetRed}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}SetBlue}}{LedGrid:unSetBlue}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}SetColor}}{LedGrid:unSetColor}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}SetColorInt}}{LedGrid:unSetColorInt}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}SetColorValue}}{LedGrid:unSetColorValue}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}SetGreen}}{LedGrid:unSetGreen}{NWtoS7h-KtFFa-5}\nwindexuse{\nwixident{LedGrid{\_}SetRed}}{LedGrid:unSetRed}{NWtoS7h-KtFFa-5}\nwendcode{}\nwbegindocs{12}\nwdocspar
+\section{Die Implementation}
+
+\nwenddocs{}\nwbegincode{13}\sublabel{NWtoS7h-14adIh-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtoS7h-14adIh-1}}}\moddef{LedGrid.c~{\nwtagstyle{}\subpageref{NWtoS7h-14adIh-1}}}\endmoddef\nwstartdeflinemarkup\nwenddeflinemarkup
+#define \nwlinkedidentc{_GNU_SOURCE}{NWtoS7h-14adIh-1}\nwindexdefn{\nwixident{{\_}GNU{\_}SOURCE}}{:unGNU:unSOURCE}{NWtoS7h-14adIh-1}
+
+#include "\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1}.h"
+#include <wiringPi.h>
+#include <softPwm.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <limits.h>
+#include <math.h>
+#include <assert.h>
+#include <pthread.h>
+
+\LA{}led grid implementation~{\nwtagstyle{}\subpageref{NWtoS7h-2vli0T-1}}\RA{}
+
+\nwnotused{LedGrid.c}\nwidentdefs{\\{{\nwixident{{\_}GNU{\_}SOURCE}}{:unGNU:unSOURCE}}}\nwidentuses{\\{{\nwixident{LedGrid}}{LedGrid}}}\nwindexuse{\nwixident{LedGrid}}{LedGrid}{NWtoS7h-14adIh-1}\nwendcode{}\nwbegindocs{14}\nwdocspar
+\subsection{Led Grid}
+
+\nwenddocs{}\nwbegincode{15}\sublabel{NWtoS7h-2vli0T-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtoS7h-2vli0T-1}}}\moddef{led grid implementation~{\nwtagstyle{}\subpageref{NWtoS7h-2vli0T-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWtoS7h-14adIh-1}}\nwenddeflinemarkup
+struct \nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} \{
+    int nCols, nRows, nPixels;
+    unsigned char *strip;
+    int fd;
+\};
+
+\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} \nwlinkedidentc{LedGrid_Init}{NWtoS7h-2vli0T-1} (int nCols, int nRows) \{\nwindexdefn{\nwixident{LedGrid{\_}Init}}{LedGrid:unInit}{NWtoS7h-2vli0T-1}
+    \nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg;
+
+    lg = malloc (sizeof (*lg));
+    lg->nCols = nCols;
+    lg->nRows = nRows;
+    lg->nPixels = nCols * nRows;
+
+    lg->strip = calloc (lg->nPixels, 3 * sizeof (unsigned char));
+
+    lg->fd = open ("/dev/spidev0.0", O_WRONLY | O_DSYNC);
+
+    return lg;
+\}
+
+void \nwlinkedidentc{LedGrid_Free}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg) \{\nwindexdefn{\nwixident{LedGrid{\_}Free}}{LedGrid:unFree}{NWtoS7h-2vli0T-1}
+    assert (lg != NULL);
+
+    free (lg->strip);
+    free (lg);
+\}
+
+void \nwlinkedidentc{LedGrid_Show}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg) \{\nwindexdefn{\nwixident{LedGrid{\_}Show}}{LedGrid:unShow}{NWtoS7h-2vli0T-1}
+    assert (lg != NULL);
+
+    write (lg->fd, lg->strip, 3*lg->nPixels);
+    fsync (lg->fd);
+\}
+
+int \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row) \{\nwindexdefn{\nwixident{coord2pixel}}{coord2pixel}{NWtoS7h-2vli0T-1}
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    if (row%2 == 0) \{
+        return row*lg->nCols + col;
+    \} else \{
+        return (row+1)*lg->nCols - 1 - col;
+    \}
+\}
+
+void \nwlinkedidentc{LedGrid_SetColor}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,\nwindexdefn{\nwixident{LedGrid{\_}SetColor}}{LedGrid:unSetColor}{NWtoS7h-2vli0T-1}
+        unsigned char red, unsigned char green, unsigned char blue) \{
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+    lg->strip[3 * pixel + RED]   = red;
+    lg->strip[3 * pixel + GREEN] = green;
+    lg->strip[3 * pixel + BLUE]  = blue;
+\}
+
+void \nwlinkedidentc{LedGrid_SetColorValue}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,\nwindexdefn{\nwixident{LedGrid{\_}SetColorValue}}{LedGrid:unSetColorValue}{NWtoS7h-2vli0T-1}
+        enum LedGrid_ColorIndexEnum colorIndex, unsigned char value) \{
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+    lg->strip[3 * pixel + colorIndex] = value;
+\}
+
+void \nwlinkedidentc{LedGrid_SetColorInt}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,\nwindexdefn{\nwixident{LedGrid{\_}SetColorInt}}{LedGrid:unSetColorInt}{NWtoS7h-2vli0T-1}
+        unsigned int value) \{
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+    lg->strip[3 * pixel + RED]   = (value >> 16) & 0xFF;
+    lg->strip[3 * pixel + GREEN] = (value >> 8) & 0xFF;
+    lg->strip[3 * pixel + BLUE]  = value & 0xFF;
+\}
+
+void \nwlinkedidentc{LedGrid_SetRed}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,\nwindexdefn{\nwixident{LedGrid{\_}SetRed}}{LedGrid:unSetRed}{NWtoS7h-2vli0T-1}
+        unsigned char value) \{
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+    lg->strip[3 * pixel + RED] = value;
+\}
+
+void \nwlinkedidentc{LedGrid_SetGreen}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,\nwindexdefn{\nwixident{LedGrid{\_}SetGreen}}{LedGrid:unSetGreen}{NWtoS7h-2vli0T-1}
+        unsigned char value) \{
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+    lg->strip[3 * pixel + GREEN] = value;
+\}
+
+void \nwlinkedidentc{LedGrid_SetBlue}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,\nwindexdefn{\nwixident{LedGrid{\_}SetBlue}}{LedGrid:unSetBlue}{NWtoS7h-2vli0T-1}
+        unsigned char value) \{
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+    lg->strip[3 * pixel + BLUE] = value;
+\}
+
+unsigned char \nwlinkedidentc{LedGrid_GetColorValue}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row,\nwindexdefn{\nwixident{LedGrid{\_}GetColorValue}}{LedGrid:unGetColorValue}{NWtoS7h-2vli0T-1}
+        enum LedGrid_ColorIndexEnum colorIndex) \{
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+
+    return lg->strip[3 * pixel + colorIndex];
+\}
+
+unsigned int \nwlinkedidentc{LedGrid_GetColorInt}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row) \{\nwindexdefn{\nwixident{LedGrid{\_}GetColorInt}}{LedGrid:unGetColorInt}{NWtoS7h-2vli0T-1}
+    int pixel;
+    unsigned int value;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+
+    value = lg->strip[3 * pixel + RED];
+    value <<= 8;
+    value += lg->strip[3 * pixel + GREEN];
+    value <<= 8;
+    value += lg->strip[3 * pixel + BLUE];
+
+    return value;
+\}
+
+unsigned char \nwlinkedidentc{LedGrid_GetRed}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row) \{\nwindexdefn{\nwixident{LedGrid{\_}GetRed}}{LedGrid:unGetRed}{NWtoS7h-2vli0T-1}
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+
+    return lg->strip[3 * pixel + RED];
+\}
+
+unsigned char \nwlinkedidentc{LedGrid_GetGreen}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row) \{\nwindexdefn{\nwixident{LedGrid{\_}GetGreen}}{LedGrid:unGetGreen}{NWtoS7h-2vli0T-1}
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+
+    return lg->strip[3 * pixel + GREEN];
+\}
+
+unsigned char \nwlinkedidentc{LedGrid_GetBlue}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg, int col, int row) \{\nwindexdefn{\nwixident{LedGrid{\_}GetBlue}}{LedGrid:unGetBlue}{NWtoS7h-2vli0T-1}
+    int pixel;
+
+    assert (lg != NULL);
+    assert (col < lg->nCols);
+    assert (row < lg->nRows);
+
+    pixel = \nwlinkedidentc{coord2pixel}{NWtoS7h-2vli0T-1} (lg, col, row);
+
+    return lg->strip[3 * pixel + BLUE];
+\}
+
+void \nwlinkedidentc{LedGrid_Clear}{NWtoS7h-2vli0T-1} (\nwlinkedidentc{LedGrid}{NWtoS7h-KtFFa-1} lg) \{\nwindexdefn{\nwixident{LedGrid{\_}Clear}}{LedGrid:unClear}{NWtoS7h-2vli0T-1}
+    int i;
+
+    assert (lg != NULL);
+
+    for (i=0; i<3*lg->nPixels; i++) \{
+        lg->strip[i] = 0;
+    \}
+\}
+
+\nwused{\\{NWtoS7h-14adIh-1}}\nwidentdefs{\\{{\nwixident{coord2pixel}}{coord2pixel}}\\{{\nwixident{LedGrid{\_}Clear}}{LedGrid:unClear}}\\{{\nwixident{LedGrid{\_}Free}}{LedGrid:unFree}}\\{{\nwixident{LedGrid{\_}GetBlue}}{LedGrid:unGetBlue}}\\{{\nwixident{LedGrid{\_}GetColorInt}}{LedGrid:unGetColorInt}}\\{{\nwixident{LedGrid{\_}GetColorValue}}{LedGrid:unGetColorValue}}\\{{\nwixident{LedGrid{\_}GetGreen}}{LedGrid:unGetGreen}}\\{{\nwixident{LedGrid{\_}GetRed}}{LedGrid:unGetRed}}\\{{\nwixident{LedGrid{\_}Init}}{LedGrid:unInit}}\\{{\nwixident{LedGrid{\_}SetBlue}}{LedGrid:unSetBlue}}\\{{\nwixident{LedGrid{\_}SetColor}}{LedGrid:unSetColor}}\\{{\nwixident{LedGrid{\_}SetColorInt}}{LedGrid:unSetColorInt}}\\{{\nwixident{LedGrid{\_}SetColorValue}}{LedGrid:unSetColorValue}}\\{{\nwixident{LedGrid{\_}SetGreen}}{LedGrid:unSetGreen}}\\{{\nwixident{LedGrid{\_}SetRed}}{LedGrid:unSetRed}}\\{{\nwixident{LedGrid{\_}Show}}{LedGrid:unShow}}}\nwidentuses{\\{{\nwixident{LedGrid}}{LedGrid}}}\nwindexuse{\nwixident{LedGrid}}{LedGrid}{NWtoS7h-2vli0T-1}\nwendcode{}
+
+\nwixlogsorted{c}{{led grid implementation}{NWtoS7h-2vli0T-1}{\nwixu{NWtoS7h-14adIh-1}\nwixd{NWtoS7h-2vli0T-1}}}%
+\nwixlogsorted{c}{{led grid interface}{NWtoS7h-KtFFa-1}{\nwixu{NWtoS7h-38kWWp-1}\nwixd{NWtoS7h-KtFFa-1}\nwixd{NWtoS7h-KtFFa-2}\nwixd{NWtoS7h-KtFFa-3}\nwixd{NWtoS7h-KtFFa-4}\nwixd{NWtoS7h-KtFFa-5}}}%
+\nwixlogsorted{c}{{LedGrid.c}{NWtoS7h-14adIh-1}{\nwixd{NWtoS7h-14adIh-1}}}%
+\nwixlogsorted{c}{{LedGrid.h}{NWtoS7h-38kWWp-1}{\nwixd{NWtoS7h-38kWWp-1}}}%
+\nwixlogsorted{i}{{\nwixident{{\_}GNU{\_}SOURCE}}{:unGNU:unSOURCE}}%
+\nwixlogsorted{i}{{\nwixident{coord2pixel}}{coord2pixel}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid}}{LedGrid}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}Clear}}{LedGrid:unClear}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}Free}}{LedGrid:unFree}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}GetBlue}}{LedGrid:unGetBlue}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}GetColorInt}}{LedGrid:unGetColorInt}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}GetColorValue}}{LedGrid:unGetColorValue}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}GetGreen}}{LedGrid:unGetGreen}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}GetRed}}{LedGrid:unGetRed}}%
+\nwixlogsorted{i}{{\nwixident{LEDGRID{\_}INCLUDED}}{LEDGRID:unINCLUDED}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}Init}}{LedGrid:unInit}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}SetBlue}}{LedGrid:unSetBlue}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}SetColor}}{LedGrid:unSetColor}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}SetColorInt}}{LedGrid:unSetColorInt}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}SetColorValue}}{LedGrid:unSetColorValue}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}SetGreen}}{LedGrid:unSetGreen}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}SetRed}}{LedGrid:unSetRed}}%
+\nwixlogsorted{i}{{\nwixident{LedGrid{\_}Show}}{LedGrid:unShow}}%
+\nwbegindocs{16}\nwdocspar
+\nowebindex
+
+\end{document}
+
+\nwenddocs{}

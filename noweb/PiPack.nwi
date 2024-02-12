@@ -1,0 +1,36 @@
+\nwixaddsx{i}{{\nwixident {{\_}GNU{\_}SOURCE}}{:unGNU:unSOURCE}}
+\nwixaddsx{c}{{led grid implementation}{NW4fnINa-2vli0T-1}{\nwixu {NW4fnINa-n24d4-1}\nwixd {NW4fnINa-2vli0T-1}}}
+\nwixaddsx{c}{{led grid interface}{NW4fnINa-KtFFa-1}{\nwixu {NW4fnINa-3PFpSw-1}\nwixd {NW4fnINa-KtFFa-1}}}
+\nwixaddsx{c}{{led strip implementation}{NW4fnINa-1ftOPo-1}{\nwixu {NW4fnINa-n24d4-1}\nwixd {NW4fnINa-1ftOPo-1}}}
+\nwixaddsx{c}{{led strip interface}{NW4fnINa-2vuPh1-1}{\nwixu {NW4fnINa-3PFpSw-1}\nwixd {NW4fnINa-2vuPh1-1}}}
+\nwixaddsx{i}{{\nwixident {LedGrid}}{LedGrid}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}Free}}{LedGrid:unFree}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}Init}}{LedGrid:unInit}}
+\nwixaddsx{i}{{\nwixident {LedGrid{\_}Show}}{LedGrid:unShow}}
+\nwixaddsx{i}{{\nwixident {LEDGRID{\_}V2}}{LEDGRID:unV2}}
+\nwixaddsx{i}{{\nwixident {LedStrip}}{LedStrip}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}AllOff}}{LedStrip:unAllOff}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}AllOn}}{LedStrip:unAllOn}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}Cycle}}{LedStrip:unCycle}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}Fade}}{LedStrip:unFade}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}Free}}{LedStrip:unFree}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}GetBlue}}{LedStrip:unGetBlue}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}GetColorValue}}{LedStrip:unGetColorValue}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}GetGreen}}{LedStrip:unGetGreen}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}GetRed}}{LedStrip:unGetRed}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}GetValue}}{LedStrip:unGetValue}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}Init}}{LedStrip:unInit}}
+\nwixaddsx{i}{{\nwixident {LEDSTRIP{\_}MAXLENGTH}}{LEDSTRIP:unMAXLENGTH}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}PushColor}}{LedStrip:unPushColor}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}PushValue}}{LedStrip:unPushValue}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}SetBlue}}{LedStrip:unSetBlue}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}SetColor}}{LedStrip:unSetColor}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}SetColorValue}}{LedStrip:unSetColorValue}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}SetGamma}}{LedStrip:unSetGamma}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}SetGreen}}{LedStrip:unSetGreen}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}SetRed}}{LedStrip:unSetRed}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}SetValue}}{LedStrip:unSetValue}}
+\nwixaddsx{i}{{\nwixident {LedStrip{\_}Show}}{LedStrip:unShow}}
+\nwixaddsx{c}{{PiPack.c}{NW4fnINa-n24d4-1}{\nwixd {NW4fnINa-n24d4-1}}}
+\nwixaddsx{c}{{PiPack.h}{NW4fnINa-3PFpSw-1}{\nwixd {NW4fnINa-3PFpSw-1}}}
+\nwixaddsx{i}{{\nwixident {PIPACK{\_}INCLUDED}}{PIPACK:unINCLUDED}}
