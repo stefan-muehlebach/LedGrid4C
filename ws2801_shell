@@ -1,0 +1,74 @@
+#!/bin/bash
+
+NUM_PIXEL=100
+
+SPI_DEVICE=/dev/spidev0.0
+SPI_SPEED=4000000
+SPI_CONF_PID=0
+
+setColor () {
+    OUT=""
+    for (( PIXEL=0; PIXEL<$NUM_PIXEL; PIXEL=$PIXEL+1 )); do
+        OUT="$OUT\x$(printf %02x $1)\x$(printf %02x $2)\x$(printf %02x $3)"
+    done
+    echo -ne $OUT > /dev/spidev0.0
+}
+
+clear () {
+    OUTPUT=""
+    for (( PIXEL=0; PIXEL<$NUM_PIXEL; PIXEL=$PIXEL+1 )); do
+        OUTPUT="$OUTPUT\x00\x00\x00"
+    done
+    echo -ne $OUTPUT > /dev/spidev0.0
+}
+
+fadeRed () {
+    for (( VALUE=0; VALUE<256; VALUE=$VALUE+1 )); do
+        setColor $VALUE 0 0
+    done
+}
+
+spiConfigStart () {
+    echo "Configure SPI bus..."
+    spi-config -d $SPI_DEVICE --wait --speed=$SPI_SPEED --mode=0 \
+        --bits=8 --lsb=0 &
+    SPI_CONF_PID=$!
+    trap "spiConfigStop" INT
+}
+
+spiConfigStop () {
+    if ps -fp $SPI_CONF_PID >/dev/null 2>&1; then
+        echo "Unconfigure SPI bus..."
+        kill $SPI_CONF_PID
+    fi
+}
+
+spiConfigStart
+
+#echo "Fade in with red color..."
+#fadeRed
+#sleep 1
+#clear
+
+echo "Set red color..."
+setColor 255 0 0
+sleep 5
+
+#setColor 255 255 0
+#sleep 1
+#setColor 0 255 0
+#sleep 1
+#setColor 0 255 255
+#sleep 1
+#setColor 0 0 255
+#sleep 1
+#setColor 255 0 255
+#sleep 1
+#setColor 255 0 0
+#sleep 1
+#setColor 255 255 255
+#sleep 1
+
+clear
+spiConfigStop
+
