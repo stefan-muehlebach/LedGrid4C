@@ -1,0 +1,19 @@
+Uebersicht ueber die Programme in diesem Verzeichnis
+----------------------------------------------------
+
+ledgrid06 - Snake-Simulation.
+ledgrid07 - Interaktives Programm fuer das LED-Panel (curses Programm).
+ledgrid09 - Verschiedene Test-Funktionen (insbesondere Lauftext).
+ledgrid10 - Vollumfaengliche Verwendung des ColorGrid-Objektes (Code von
+            ColorGrid direkt im Programm).
+ledgrid11 - Vollumfaengliche Verwendung des ColorGrid-Objektes (Verwendung von
+            liPiPack.so)
+ledgrid15 - 'top'-Anzeige auf dem LED-Panel.
+ledgrid30 - Weisses Rechteck, das mit den Cursor-Tasten verschoben werden kann.
+            Beendet das Programm mit 'x'.
+ledgrid50 - Simulation der 'Plasma'-Funktion aus dem PixelController.
+ledgrid51 - Test der 'SetColorInt'-Funktion von 'LedGrid'.
+ledgrid53 - Realisation der 'Plasma'-Funktion aus PixelController mit
+            Angabe eines Files mit den Farb-Paletten.
+
+
